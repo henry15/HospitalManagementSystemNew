@@ -1,0 +1,161 @@
+﻿@model HospitalManagementSystemNew.Models.Patient
+
+@using HospitalManagementSystemNew.Models
+
+
+@{
+    ViewBag.Title = "EditPatient";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="row">
+    <ol class="breadcrumb">
+        <li>
+            <a href="#">
+                <em class="fa fa-home"></em>
+            </a>
+        </li>
+        <li class="active">Patient</li>
+        <li class="active">Edit Patient</li>
+    </ol>
+</div>
+
+<h2>Edit Patient</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+            </div>
+            @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.ApplicationUser.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.ApplicationUser.Email, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ApplicationUser.Email, "", new { @class = "text-danger" })
+            </div>
+
+            @Html.LabelFor(model => model.PhoneNo, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.PhoneNo, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.PhoneNo, "", new { @class = "text-danger" })
+            </div>
+
+        </div>
+        @{
+            var bloodlist = new List<Doctor>
+{
+                new Doctor {BloodGroup = "A+", Gender = "Male"},
+                new Doctor {BloodGroup = "O+", Gender = "Female"},
+                new Doctor {BloodGroup = "B+", Gender = "Other"},
+                new Doctor {BloodGroup = "AB+"},
+                new Doctor {BloodGroup = "A-"},
+                new Doctor {BloodGroup = "O-"},
+                new Doctor {BloodGroup = "B-"},
+                new Doctor {BloodGroup = "AB-"}
+            };
+            var genderlist = new List<Doctor>
+{
+                new Doctor {Gender = "Male"},
+                new Doctor {Gender = "Female"},
+                new Doctor {Gender = "Other"}
+            };
+            var statuslist = new List<Doctor>
+{
+                new Doctor {Status = "Active"},
+                new Doctor {Status = "Inactive"}
+            };
+        }
+        <div class="form-group">
+            @Html.LabelFor(model => model.BloodGroup, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.DropDownListFor(model => model.BloodGroup, new SelectList(bloodlist, "BloodGroup", "BloodGroup"), "Select Blood Group", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.BloodGroup, "", new { @class = "text-danger" })
+            </div>
+            @Html.LabelFor(model => model.Gender, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.DropDownListFor(model => model.Gender, new SelectList(genderlist, "Gender", "Gender"), "Select Gender", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Gender, "", new { @class = "text-danger" })
+            </div>
+
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.DateOfBirth, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.DateOfBirth, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.DateOfBirth, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-success" />
+            </div>
+        </div>
+
+        <br />
+
+        <h3>OPD Details</h3>
+        <table id="patientOPD_id" class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PaitentOPD.VisitDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PaitentOPD.Diagnosis)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PaitentOPD.Prescription)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PaitentOPD.Ht)
+                    </th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.PaitentOPDDetails)
+                    {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.VisitDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Diagnosis)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Prescription)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Ht)
+                    </td>
+                    <td>
+                        @*<a href="@Url.Action("EditPatient", new {id = item.Id})" class="fa fa-pencil-square-o" style="font-size: 19px"></a> |
+                            <a href="@Url.Action("DeletePatient", new {id = item.ApplicationUserId})" class="fa fa-trash" style="font-size: 19px; color: red"></a>*@
+                    </td>
+                </tr>
+                }
+            </tbody>
+
+        </table>
+
+
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "ListOfPatients")
+</div>
